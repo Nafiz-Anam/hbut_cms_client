@@ -144,10 +144,16 @@ const Billing = () => {
                     <i
                         className="fas fa-edit p-2"
                         onClick={() => editBilling(props)}
+                        style={{ color: "green" }}
+                        data-toggle="tooltip"
+                        title="Edit Course Details"
                     ></i>
                     <i
                         className="fas fa-trash p-2"
                         onClick={() => deleteBilling(props)}
+                        style={{ color: "red" }}
+                        data-toggle="tooltip"
+                        title="Details Course"
                     ></i>
                 </div>
             ),
@@ -178,13 +184,23 @@ const Billing = () => {
         <Layout>
             <div className="d-flex justify-content-between align-items-center">
                 <h2 className="billing-title">Course List</h2>
-                <button className="btn btn-primary" onClick={handleAdd}>
+                <button
+                    className="btn btn-primary"
+                    onClick={handleAdd}
+                    data-toggle="tooltip"
+                    title="Add New Course Details"
+                >
                     Add New
                 </button>
             </div>
             <div className="d-flex align-items-center filter">
-                <button className="btn btn-primary" onClick={handleShow}>
-                    Filter Options
+                <button
+                    className="btn btn-secondary"
+                    onClick={handleShow}
+                    data-toggle="tooltip"
+                    title="Filter Courses by Name, Course Type or Teacher"
+                >
+                    <i class="fa-solid fa-sliders"></i> Filter Options
                 </button>
             </div>
             <Table
