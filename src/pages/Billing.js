@@ -22,16 +22,24 @@ const Billing = () => {
     const { register, handleSubmit, reset } = useForm();
     const [filterInfo, setFilterInfo] = useState({});
 
+    console.log(loadData);
+
     const handleAdd = () => {
         setAction("add");
         setDefaultData({});
         setShow(true);
     };
 
+    // useEffect(() => {
+    //     console.log("here");
+    //     getData();
+    //     setLoadData(false);
+    // }, [loadData]);
+
     useEffect(() => {
-        getData();
+        getData(filterInfo);
         setLoadData(false);
-    }, [loadData]);
+    }, [filterInfo, loadData]);
 
     const getData = async (data) => {
         try {
@@ -77,12 +85,12 @@ const Billing = () => {
 
     const deleteBilling = (props) => {
         const id = (props?.row?.original?.id).substring(1);
-        console.log(id);
         try {
             axios
                 .delete(API_BASE_URL + `/api/v1/course/delete/${id}`)
                 .then((res) => {
                     if (res.data.status === true) {
+                        setFilterInfo({});
                         setLoadData(true);
                     }
                 });
@@ -166,10 +174,6 @@ const Billing = () => {
         handleClose2();
     };
 
-    useEffect(() => {
-        getData(filterInfo);
-    }, [filterInfo]);
-
     return (
         <Layout>
             <div className="d-flex justify-content-between align-items-center">
@@ -212,6 +216,7 @@ const Billing = () => {
                             billID={billID}
                             setLoadData={setLoadData}
                             setShow={setShow}
+                            setFilterInfo={setFilterInfo}
                             label={
                                 action !== "edit"
                                     ? "Add Course"

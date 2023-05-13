@@ -4,7 +4,15 @@ import { API_BASE_URL } from "../apiconstants";
 import axios from "axios";
 import "../pages/global.css";
 
-const Form = ({ defaultData, action, billID, setLoadData, setShow, label }) => {
+const Form = ({
+    defaultData,
+    action,
+    billID,
+    setLoadData,
+    setShow,
+    label,
+    setFilterInfo,
+}) => {
     const {
         register,
         handleSubmit,
@@ -20,6 +28,7 @@ const Form = ({ defaultData, action, billID, setLoadData, setShow, label }) => {
                     .post(API_BASE_URL + "/api/v1/course/add", data)
                     .then((res) => {
                         if (res.data.status === true) {
+                            setFilterInfo({});
                             setLoadData(true);
                         }
                     });
@@ -33,6 +42,7 @@ const Form = ({ defaultData, action, billID, setLoadData, setShow, label }) => {
                     .post(API_BASE_URL + "/api/v1/course/update", data)
                     .then((res) => {
                         if (res.data.status === true) {
+                            setFilterInfo({});
                             setLoadData(true);
                         }
                     });
