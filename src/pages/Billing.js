@@ -3,31 +3,31 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Table from "../components/Table/Table";
 import "./global.css";
-import { useForm } from "react-hook-form";
 import { API_BASE_URL } from "../apiconstants";
 import { Modal } from "react-bootstrap";
+import Form from "../components/Form";
 
 const Billing = () => {
     const [data, setData] = useState([]);
     const [show, setShow] = useState(false);
-    const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-    } = useForm();
+    const [billID, setBillID] = useState("");
+    const [action, setAction] = useState("");
+    const [defaultData, setDefaultData] = useState(null);
     const [loadData, setLoadData] = useState(false);
 
+    const handleAdd = () => {
+        setAction("add");
+        setDefaultData({});
+        setShow(true);
+    };
+
     useEffect(() => {
-        console.log("object");
         getData();
         setLoadData(false);
     }, [loadData]);
 
     const getData = async () => {
-        console.log("ok");
         try {
             const response = await axios(API_BASE_URL + "/api/v1/course/list");
             console.log(response.data.data);
@@ -36,6 +36,51 @@ const Billing = () => {
             console.log(err);
         }
     };
+
+    const getDetails = async (id) => {
+        try {
+            const response = await axios(
+                API_BASE_URL + `/api/v1/course/details/${id}`
+            );
+            // console.log(response.data.data);
+            let data = {
+                course_name: response.data.data[0].course_name,
+                course_type: response.data.data[0].course_type,
+                course_credits: response.data.data[0].course_credits,
+                course_duration: response.data.data[0].course_duration,
+                course_teacher: response.data.data[0].course_teacher,
+            };
+            setDefaultData(data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const editBilling = async (props) => {
+        const id = (props?.row?.original?.id).substring(1);
+        setAction("edit");
+        await getDetails(id);
+        setShow(true);
+        setBillID(id);
+    };
+
+    const deleteBilling = (props) => {
+        const id = (props?.row?.original?.id).substring(1);
+        console.log(id);
+        try {
+            axios
+                .delete(API_BASE_URL + `/api/v1/course/delete/${id}`)
+                .then((res) => {
+                    if (res.data.status === true) {
+                        setLoadData(true);
+                    }
+                });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    console.log(defaultData);
 
     const columns = [
         {
@@ -62,6 +107,22 @@ const Billing = () => {
             Header: "Course Teacher",
             accessor: "course_teacher",
         },
+        {
+            Header: "Action",
+            accessor: "action",
+            Cell: (props) => (
+                <div className="d-flex">
+                    <i
+                        className="fas fa-edit p-2"
+                        onClick={() => editBilling(props)}
+                    ></i>
+                    <i
+                        className="fas fa-trash p-2"
+                        onClick={() => deleteBilling(props)}
+                    ></i>
+                </div>
+            ),
+        },
     ];
 
     const itemsPerPage = [
@@ -79,33 +140,11 @@ const Billing = () => {
         },
     ];
 
-    const onSubmit = (data) => {
-        // console.log("form data =>", data);
-        try {
-            axios
-                .post(API_BASE_URL + "/api/v1/course/add", data)
-                .then((res) => {
-                    if (res.data.status === true) {
-                        setLoadData(true);
-                    }
-                });
-        } catch (err) {
-            console.log(err);
-        }
-        reset({
-            course_name: "",
-            course_credits: "",
-            course_duration: "",
-            course_teacher: "",
-        });
-        setShow(false);
-    };
-
     return (
         <Layout>
             <div className="d-flex justify-content-between align-items-center">
                 <h2 className="billing-title">Course List</h2>
-                <button className="btn btn-primary" onClick={handleShow}>
+                <button className="btn btn-primary" onClick={handleAdd}>
                     Add New
                 </button>
             </div>
@@ -123,107 +162,28 @@ const Billing = () => {
 
             <Modal show={show} onHide={handleClose} size="lg">
                 <Modal.Header closeButton>
-                    <Modal.Title>Add New Course</Modal.Title>
+                    <Modal.Title>
+                        {action !== "edit" ? "Add New Course" : "Update Course"}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form
-                        className="modal-form py-1"
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="Course Name"
-                                {...register("course_name", {
-                                    required: true,
-                                    pattern: /[A-Za-z\s]/,
-                                })}
-                            />
-                            {errors.course_name &&
-                                errors.course_name.type === "required" && (
-                                    <span className="text-danger">
-                                        This field is required
-                                    </span>
-                                )}
-                            {errors.course_name &&
-                                errors.course_name.type === "pattern" && (
-                                    <span className="text-danger">
-                                        Name must be in alphabets
-                                    </span>
-                                )}
-                        </div>
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="Course Credit"
-                                {...register("course_credits", {
-                                    required: true,
-                                })}
-                            />
-                            {errors.course_credits &&
-                                errors.course_credits.type === "required" && (
-                                    <span className="text-danger">
-                                        This field is required
-                                    </span>
-                                )}
-                        </div>
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="Class Hours"
-                                {...register("course_duration", {
-                                    required: true,
-                                    pattern: /[0-9]/,
-                                })}
-                            />
-                            {errors.course_duration &&
-                                errors.course_duration.type === "required" && (
-                                    <span className="text-danger">
-                                        This field is required
-                                    </span>
-                                )}
-                            {errors.course_duration &&
-                                errors.course_duration.type === "pattern" && (
-                                    <span className="text-danger">
-                                        Duration must be in numeric
-                                    </span>
-                                )}
-                        </div>
-                        <div>
-                            <select
-                                {...register("course_type", { required: true })}
-                            >
-                                <option value="compulsory">Compulsory</option>
-                                <option value="optional">Optional</option>
-                            </select>
-                            {errors.course_type &&
-                                errors.course_type.type === "required" && (
-                                    <span className="text-danger">
-                                        This field is required
-                                    </span>
-                                )}
-                        </div>
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="Course Teacher"
-                                {...register("course_teacher", {
-                                    required: true,
-                                })}
-                            />
-                            {errors.course_teacher &&
-                                errors.course_teacher.type === "required" && (
-                                    <span className="text-danger">
-                                        This field is required
-                                    </span>
-                                )}
-                        </div>
-                        <input
-                            className="btn add-btn mt-3"
-                            type="submit"
-                            value="Add Course"
+                    {/* {action === "edit" && !Object.keys(defaultData).length ? ( */}
+                    {action === "edit" && defaultData === null ? (
+                        <span>Loading...</span>
+                    ) : (
+                        <Form
+                            defaultData={defaultData}
+                            action={action}
+                            billID={billID}
+                            setLoadData={setLoadData}
+                            setShow={setShow}
+                            label={
+                                action !== "edit"
+                                    ? "Add Course"
+                                    : "Update Course"
+                            }
                         />
-                    </form>
+                    )}
                 </Modal.Body>
             </Modal>
 
