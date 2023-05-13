@@ -19,7 +19,7 @@ const Billing = () => {
     const [action, setAction] = useState("");
     const [defaultData, setDefaultData] = useState(null);
     const [loadData, setLoadData] = useState(false);
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const [filterInfo, setFilterInfo] = useState({});
 
     const handleAdd = () => {
@@ -91,9 +91,13 @@ const Billing = () => {
         }
     };
 
-    const handleReset = async () => {
-        await setFilterInfo({});
-        getData(filterInfo);
+    const handleReset = () => {
+        reset({
+            course_name: "",
+            course_type: "",
+            course_teacher: "",
+        });
+        setFilterInfo({});
         handleClose2();
     };
 
@@ -157,11 +161,14 @@ const Billing = () => {
         },
     ];
 
-    const onSubmit = async (data) => {
-        await setFilterInfo(data);
-        getData(filterInfo);
+    const onSubmit = (data) => {
+        setFilterInfo(data);
         handleClose2();
     };
+
+    useEffect(() => {
+        getData(filterInfo);
+    }, [filterInfo]);
 
     return (
         <Layout>
@@ -226,6 +233,7 @@ const Billing = () => {
                 <Modal.Body className="filter">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <select {...register("course_type")}>
+                            <option value="">Select Course Type</option>
                             <option value="optional">Optional</option>
                             <option value="compulsory">Compulsory</option>
                         </select>
