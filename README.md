@@ -1,18 +1,18 @@
-# Bills. (frontend)
+# HBUT_CMS (Course Management System). (frontend)
 
-**Bills.** is a full feature Online online billings record system.
+**HBUT_CMS.** is a full feature Online online Course Management system.
 
 ## Live
 
-[Click](https://ph-instructor-task.netlify.app/) or visit here: https://ph-instructor-task.netlify.app/
+[Click](https://hbut-course-management-system.onrender.com/) or visit here: https://hbut-course-management-system.onrender.com/
 
 ## Live API
 
-[Click](https://ph-task-api.herokuapp.com/) or visit here: https://ph-task-api.herokuapp.com/
+[Click](https://hbut-course-management-api.onrender.com) or visit here: https://hbut-course-management-api.onrender.com
 
 ## Tech Stack
 
-**Client:** Reactjs,React-Router-DOM, Redux-toolkit, Bootstrap, React-Hook-Form, Axios
+**Client:** ReactJS, React-Hook-Form, Axios, Bootstrap
 
 ## Frontend Features
 
@@ -24,37 +24,37 @@
     -   Table data pagination
     -   Edit/Delete option
     -   Add New billing option
--   Data preload spinner
--   Simple 3 page web app. Login, Registration and Billings
+-   Simple 1 page web app
 -   Realistic Header,Footer
 
 ![Website Screenshot](d01.png)
 
 ## API Features
 
--   Custom JWT Auth
--   All protected routes
--   Used mongodb for storage of data
--   mongoose for server side data validation
+-   CRUD operation
+-   All simple routes
+-   Used MySQL for storage of data
 
 ![Website Screenshot](f01.png)
 
-![Website Screenshot](bill.png)
+![Website Screenshot](f02.png)
 
-![Website Screenshot](edit.png)
+![Website Screenshot](f03.png)
+
+![Website Screenshot](f04.png)
 
 ## Run Locally
 
-Clone the project
+Clone the Project
 
 ```bash
-  git clone https://github.com/Nafiz-Anam/billing-sytem-client
+  git clone https://github.com/Nafiz-Anam/hbut_cms_client
 ```
 
 Go to the project directory
 
 ```bash
-  cd billing-sytem-client
+  cd hbut_cms_client
 ```
 
 Install dependencies
@@ -71,4 +71,4 @@ Start the server
 
 ## Authors
 
--   [Nafiz Anam](https://www.fiverr.com/anam_nafiz)
+-   [Nafiz Anam](https://nafizanam.com/)
