@@ -7,6 +7,7 @@ import { API_BASE_URL } from "../apiconstants";
 import { Modal } from "react-bootstrap";
 import Form from "../components/Form";
 import { useForm } from "react-hook-form";
+import { Helmet } from "react-helmet";
 
 const Billing = () => {
     const [data, setData] = useState([]);
@@ -182,6 +183,34 @@ const Billing = () => {
 
     return (
         <Layout>
+            <Helmet>
+                <title>Custom Page Title</title>
+                <meta
+                    name="description"
+                    content="This is the custom page description"
+                />
+                <meta property="og:title" content="Custom Page Title" />
+                <meta
+                    property="og:description"
+                    content="This is the custom page description"
+                />
+                <meta
+                    property="og:image"
+                    content="https://placehold.co/600x400"
+                />
+                <meta
+                    property="twitter:title"
+                    content="Custom twitter Page Title"
+                />
+                <meta
+                    property="twitter:description"
+                    content="Custom twitter Page description"
+                />
+                <meta
+                    property="twitter:image"
+                    content="https://placehold.co/600x400"
+                />
+            </Helmet>
             <div className="d-flex justify-content-between align-items-center">
                 <h2 className="billing-title">Course List</h2>
                 <button
